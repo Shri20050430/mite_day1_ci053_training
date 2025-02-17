@@ -1,0 +1,25 @@
+#include <stdio.h>
+
+int main() {
+    int N, units, i;
+    float charge, total_bill = 0.0f;
+
+    printf("Enter number of customers\n");
+    scanf("%d", &N);
+    printf("Enter units consumed for each customer\n");
+
+    for (i = 0; i < N; i++) {
+        scanf("%d", &units);
+        if (units <= 100) {
+            charge = units * 2.0f;
+        } else if (units > 100 && units <= 200) {
+            charge = (100 * 2.0f) + ((units - 100) * 3.0f);
+        } else if (units > 200) {
+            charge = (100 * 2.0f) + (100 * 3.0f) + ((units - 200) * 5.0f);
+        }
+        total_bill += charge;  // Accumulate the total bill
+    }
+
+    printf("Total Bill: ₹%.2f\n", total_bill);
+    return 0;
+}
