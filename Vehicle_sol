@@ -1,0 +1,22 @@
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+char v_type[30];
+int dist;
+printf("enter vehicle type\n");
+scanf("%s",v_type);
+printf("enter the distance travelled in km\n");
+scanf("%d",&dist);
+if(strcmp(v_type,"car")==0){
+    base_charge+=(dist)*5.0f;
+}
+else if(strcmp(v_type,"truck")==0){
+    base_charge+=(dist)*10.0f;
+}
+else if(strcmp(v_type,"bus")==0){
+    base_charge+=(dist)*8.0f;
+}
+if(strcmp(v_type,"car")==0 && dist>=500.0f){
+    discount+=(base_charge)*(10.0f/100.0f);
+}
