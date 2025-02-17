@@ -1,0 +1,26 @@
+#include <stdio.h>
+
+int main() {
+    int salary, N, i;
+    int low_sal = 0, mid_sal = 0, high_sal = 0;
+
+    printf("Enter number of employees\n");
+    scanf("%d", &N);
+    printf("Enter the salary for each employee\n");
+
+    for (i = 0; i < N; i++) {
+        scanf("%d", &salary);
+        if (salary < 30000)
+            low_sal++;
+        else if (salary >= 30000 && salary <= 70000)
+            mid_sal++;
+        else if (salary > 70000)
+            high_sal++;
+    }
+
+    printf("Low Income: %d\n", low_sal);
+    printf("Middle Income: %d\n", mid_sal);
+    printf("High Income: %d\n", high_sal);
+
+    return 0;
+}
