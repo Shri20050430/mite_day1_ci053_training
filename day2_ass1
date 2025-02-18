@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <string.h>
+
+int isEligibleForInsurance(int age, char preExistingCondition[], int monthlySalary) {
+    if (age >= 18 && age <= 60 && strcmp(preExistingCondition, "no") == 0 && monthlySalary >= 25000) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+int main() {
+    int age, monthlySalary;
+    char preExistingCondition[4];
+
+    printf("Enter Age: ");
+    scanf("%d", &age);
+    printf("Any Pre-existing Condition? (yes/no): ");
+    scanf("%s", preExistingCondition);
+    printf("Enter Monthly Salary: ");
+    scanf("%d", &monthlySalary);
+
+    if (isEligibleForInsurance(age, preExistingCondition, monthlySalary)) {
+        printf("Eligible for Medical Insurance\n");
+    } else {
+        printf("Not Eligible for Medical Insurance\n");
+    }
+
+    return 0;
+}
