@@ -1,0 +1,48 @@
+#include <stdio.h>
+
+float balance = 10000.00; // Initial balance
+
+void atmTransaction(int choice, float amount) {
+    switch (choice) {
+        case 1: // Withdraw
+            if (amount <= balance) {
+                balance -= amount;
+                printf("Transaction Successful. Remaining Balance: ₹%.2f\n", balance);
+            } else {
+                printf("Insufficient Balance.\n");
+            }
+            break;
+        case 2: // Deposit
+            balance += amount;
+            printf("Transaction Successful. New Balance: ₹%.2f\n", balance);
+            break;
+        case 3: // Check Balance
+            printf("Current Balance: ₹%.2f\n", balance);
+            break;
+        default:
+            printf("Invalid Choice.\n");
+    }
+}
+
+int main() {
+    int choice;
+    float amount;
+
+    printf("Enter your choice:\n");
+    printf("1. Withdraw\n");
+    printf("2. Deposit\n");
+    printf("3. Check Balance\n");
+    printf("Choice: ");
+    scanf("%d", &choice);
+
+    if (choice == 1 || choice == 2) {
+        printf("Enter Amount: ");
+        scanf("%f", &amount);
+    } else {
+        amount = 0;
+    }
+
+    atmTransaction(choice, amount);
+
+    return 0;
+}
