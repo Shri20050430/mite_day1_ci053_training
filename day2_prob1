@@ -1,0 +1,38 @@
+#include<stdio.h>
+float calculateBill(int no_of_days,char wtype){
+    float amt;
+    float price;
+    switch(wtype){
+        case 'G':
+        price=1000.0f;
+        break;
+        case 'S':
+        price=2000.0f;
+        break;
+        case 'P':
+        price=5000.0f;
+        break;
+    }
+    amt=price*no_of_days;
+    if(no_of_days>7){
+    amt=amt-(amt)*(0.95f);
+    }
+    return amt;
+
+}
+int main(){
+    int no_of_days;
+    char pname[255];
+    char wtype;
+    printf("Enter patient name:");
+    scanf("%s\n",pname);
+    printf("Enter ward type(G/S/P):");
+    scanf("%c\n",&wtype);getchar();
+    printf("Enter no of days:");
+    scanf("%d\n",&no_of_days);
+    float amt=calculateBill(no_of_days,wtype);
+    printf("Patient Name:%s\n",pname);
+    printf("Total Bill:%.2f",amt);
+   return 0;
+}
+
