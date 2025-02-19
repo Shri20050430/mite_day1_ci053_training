@@ -1,0 +1,53 @@
+/*Cricket Scoreboard System`
+`Scenario:`
+A `cricket club` records match scores in an array.
+The system should:
+Find the `highest and lowest score`
+Calculate the `average score`
+Use `arrays` for data storage and `looping techniques` for computation.
+
+`Input Example:`
+```
+Enter scores of 5 matches: 245 189 320 270 150
+```
+
+`Output Example:`
+```
+Highest Score: 320
+Lowest Score: 150
+Average Score: 234.8 */
+#include <stdio.h>
+
+int main() {
+    int scores[100], n;
+    int highest, lowest;
+    float sum = 0.0, average;
+
+    printf("Enter the number of matches: ");
+    scanf("%d", &n);
+
+    printf("Enter scores of %d matches: ", n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &scores[i]);
+    }
+
+    highest = lowest = scores[0];
+
+    for (int i = 0; i < n; i++) {
+        if (scores[i] > highest) {
+            highest = scores[i];
+        }
+        if (scores[i] < lowest) {
+            lowest = scores[i];
+        }
+        sum += scores[i];
+    }
+
+    average = sum / n;
+
+    printf("Highest Score: %d\n", highest);
+    printf("Lowest Score: %d\n", lowest);
+    printf("Average Score: %.1f\n", average);
+
+    return 0;
+}
