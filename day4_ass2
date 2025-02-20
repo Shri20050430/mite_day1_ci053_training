@@ -1,0 +1,86 @@
+/* Online Shopping Order Processing`  
+`Scenario:`  
+An `online shopping system` records orders with `Order ID, Customer Name, Product, and Amount`. The system should:  
+- Store and update orders using `structures`  
+- Write order details to a `file`  
+- Allow `retrieval of order details`  
+
+`Input Example:`  
+```
+Enter number of orders: 2
+Order 1: 301, Alice, Laptop, ₹60000
+Order 2: 302, Bob, Mobile, ₹25000
+
+Enter Order ID to search: 301
+```
+
+`Output Example:`  
+```
+Order Found: Alice - Laptop - ₹60000
+Record saved in "orders.txt"
+```        */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Order {
+    int orderID;
+    char customerName[50];
+    char product[50];
+    int amount;
+};
+
+void saveOrdersToFile(struct Order orders[], int count) {
+    FILE *fptr = fopen("orders.txt", "w");
+    if (fptr == NULL) {
+        printf("Error opening file!");
+        exit(1);
+    }
+
+    for (int i = 0; i < count; i++) {
+        fprintf(fptr, "%d, %s, %s, %d\n", orders[i].orderID, orders[i].customerName, orders[i].product, orders[i].amount);
+    }
+
+    fclose(fptr);
+    printf("Record saved in \"orders.txt\"\n");
+}
+
+void searchOrder(struct Order orders[], int count, int searchID) {
+    for (int i = 0; i < count; i++) {
+        if (orders[i].orderID == searchID) {
+            printf("Order Found: %s - %s - ₹%d\n", orders[i].customerName, orders[i].product, orders[i].amount);
+            return;
+        }
+    }
+    printf("Order not found!\n");
+}
+
+int main() {
+    int numOrders;
+    printf("Enter number of orders: ");
+    scanf("%d", &numOrders);
+
+    struct Order orders[numOrders];
+
+    for (int i = 0; i < numOrders; i++) {
+        printf("Order %d:\n", i + 1);
+        printf("Enter Order ID: ");
+        scanf("%d", &orders[i].orderID);
+        printf("Enter Customer Name: ");
+        scanf(" %[^\n]s", orders[i].customerName);
+        printf("Enter Product: ");
+        scanf(" %[^\n]s", orders[i].product);
+        printf("Enter Amount: ₹");
+        scanf("%d", &orders[i].amount);
+    }
+
+    int searchID;
+    printf("Enter Order ID to search: ");
+    scanf("%d", &searchID);
+
+    searchOrder(orders, numOrders, searchID);
+
+    saveOrdersToFile(orders, numOrders);
+
+    return 0;
+}
