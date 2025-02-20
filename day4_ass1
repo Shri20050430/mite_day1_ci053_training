@@ -1,0 +1,84 @@
+/* University Student Record Management`  
+`Scenario:`  
+A `university` maintains student records, 
+including `Roll No, Name, Course, and Marks`. 
+The system should:  
+- Store details using `structures`  
+- Save records to a `file`  
+- Allow searching for a `student by Roll No`  
+
+`Input Example:`  
+```
+Enter number of students: 3
+Student 1: 101, Alice, Computer Science, 85
+Student 2: 102, Bob, Mechanical, 90
+Student 3: 103, Charlie, Electrical, 78
+
+Enter Roll No to search: 102
+```
+
+`Output Example:`  
+```
+Student Found: Bob, Mechanical, Marks: 90
+Record saved in "students.txt"
+``` */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Student {
+    int rollNo;
+    char name[50];
+    char course[50];
+    int marks;
+};
+
+void saveToFile(struct Student students[], int count) {
+    FILE *fptr = fopen("students.txt", "w");
+    if (fptr == NULL) {
+        printf("Error opening file!");
+        exit(1);
+    }
+
+    for (int i = 0; i < count; i++) {
+        fprintf(fptr, "%d, %s, %s, %d\n", students[i].rollNo, students[i].name, students[i].course, students[i].marks);
+    }
+
+    fclose(fptr);
+    printf("Record saved in \"students.txt\"\n");
+}
+
+int main() {
+    int numStudents;
+    printf("Enter number of students: ");
+    scanf("%d", &numStudents);
+
+    struct Student students[numStudents];
+
+    for (int i = 0; i < numStudents; i++) {
+        printf("Student %d:\n", i + 1);
+        printf("Enter Roll No: ");
+        scanf("%d", &students[i].rollNo);
+        printf("Enter Name: ");
+        scanf(" %[^\n]s", students[i].name);
+        printf("Enter Course: ");
+        scanf(" %[^\n]s", students[i].course);
+        printf("Enter Marks: ");
+        scanf("%d", &students[i].marks);
+    }
+
+    int searchRollNo;
+    printf("Enter Roll No to search: ");
+    scanf("%d", &searchRollNo);
+
+    for (int i = 0; i < numStudents; i++) {
+        if (students[i].rollNo == searchRollNo) {
+            printf("Student Found: %s, %s, Marks: %d\n", students[i].name, students[i].course, students[i].marks);
+            break;
+        }
+    }
+
+    saveToFile(students, numStudents);
+
+    return 0;
+}
