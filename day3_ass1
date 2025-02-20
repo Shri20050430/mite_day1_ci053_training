@@ -26,90 +26,63 @@ Passengers traveling to Mumbai: Bob */
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_PASSENGERS 100
-
-typedef struct {
-    char name[50];
+struct pass {
+    char p_name[50];
     int age;
-    char destination[50];
-} Passenger;
+    char p_dest[50];
+};
 
-void addPassenger(Passenger passengers[], int *count, char name[], int age, char destination[]) {
-    strcpy(passengers[*count].name, name);
-    passengers[*count].age = age;
-    strcpy(passengers[*count].destination, destination);
-    (*count)++;
-}
+void sorting(struct pass P[], int n) {
+    int i, j;
+    struct pass temp;
 
-void sortPassengersByDestination(Passenger passengers[], int count) {
-    Passenger temp;
-    for (int i = 0; i < count - 1; i++) {
-        for (int j = i + 1; j < count; j++) {
-            if (strcmp(passengers[i].destination, passengers[j].destination) > 0) {
-                temp = passengers[i];
-                passengers[i] = passengers[j];
-                passengers[j] = temp;
+    for (i = 0; i < n - 1; i++) {
+        for (j = i + 1; j < n; j++) {
+            if (strcmp(P[i].p_dest, P[j].p_dest) > 0) {
+                temp = P[i];
+                P[i] = P[j];
+                P[j] = temp;
             }
         }
     }
 }
 
-void searchPassengersByDestination(Passenger passengers[], int count, char destination[]) {
+void searching(struct pass P[], int n, char destin[]) {
     int found = 0;
-    for (int i = 0; i < count; i++) {
-        if (strcmp(passengers[i].destination, destination) == 0) {
-            printf("%s\n", passengers[i].name);
+    for (int i = 0; i < n; i++) {
+        if (strcmp(P[i].p_dest, destin) == 0) {
+            printf("Passenger traveling to %s: %s, Age: %d\n", P[i].p_dest, P[i].p_name, P[i].age);
             found = 1;
         }
     }
     if (!found) {
-        printf("No passengers traveling to %s\n", destination);
+        printf("No passengers traveling to %s found.\n", destin);
     }
 }
 
 int main() {
-    Passenger passengers[MAX_PASSENGERS];
-    int count = 0;
+    struct pass P[10];
     int n;
-
     printf("Enter number of passengers: ");
     scanf("%d", &n);
-    getchar(); // consume newline character
+    getchar(); // to consume newline character after scanf
 
     for (int i = 0; i < n; i++) {
-        char name[50];
-        int age;
-        char destination[50];
-
-        printf("Passenger %d Name: ", i + 1);
-        fgets(name, sizeof(name), stdin);
-        name[strcspn(name, "\n")] = 0; // remove newline character
-
-        printf("Passenger %d Age: ", i + 1);
-        scanf("%d", &age);
-        getchar(); // consume newline character
-
-        printf("Passenger %d Destination: ", i + 1);
-        fgets(destination, sizeof(destination), stdin);
-        destination[strcspn(destination, "\n")] = 0; // remove newline character
-
-        addPassenger(passengers, &count, name, age, destination);
+        printf("Enter name, age, and destination for passenger %d: ", i + 1);
+        scanf("%s %d %s", P[i].p_name, &P[i].age, P[i].p_dest);
     }
 
-    sortPassengersByDestination(passengers, count);
+    sorting(P, n);
 
-    printf("\nSorted List (by destination):\n");
-    for (int i = 0; i < count; i++) {
-        printf("%s\n%s\n", passengers[i].name, passengers[i].destination);
+    printf("Sorted list of passengers by destination:\n");
+    for (int i = 0; i < n; i++) {
+        printf("Passenger %d: %s, %d, %s\n", i + 1, P[i].p_name, P[i].age, P[i].p_dest);
     }
 
-    char searchDest[50];
-    printf("Enter destination to search: ");
-    fgets(searchDest, sizeof(searchDest), stdin);
-    searchDest[strcspn(searchDest, "\n")] = 0; // remove newline character
-
-    printf("Passengers traveling to %s:\n", searchDest);
-    searchPassengersByDestination(passengers, count, searchDest);
+    char destin[50];
+    printf("Enter the destination to search: ");
+    scanf("%s", destin);
+    searching(P, n, destin);
 
     return 0;
 }
