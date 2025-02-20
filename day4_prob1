@@ -1,0 +1,77 @@
+/*1. Employee Database using Structures`  
+`Problem Statement:`  
+Create a structure `Employee` with the following fields:  
+- `ID` (integer)  
+- `Name` (string)  
+- `Salary` (float)  
+- `Department` (string)  
+
+Write a program that:  
+1. Reads `N employees` and stores them in an array of structures.  
+2. Displays all employee details.  
+3. Finds and displays the employee with the `highest salary`.  
+
+`Function Prototypes:`  
+```c
+void readEmployees(Employee emp[], int n);
+void displayEmployees(Employee emp[], int n);
+Employee findHighestSalary(Employee emp[], int n);
+```
+
+`Sample Test Case:`  
+`Input:`  
+```plaintext
+Enter number of employees: 3  
+Enter details (ID, Name, Salary, Department):  
+1 John 50000 IT  
+2 Alice 60000 HR  
+3 Bob 55000 Sales  
+```
+`Output:`  
+```plaintext
+Employee with Highest Salary: Alice, 60000 (HR)  
+``` */
+#include<stdio.h>
+struct Employee_t{
+int id;
+char name[200];
+float salary;
+char department[50];
+};
+
+typedef struct Employee_t Employee; 
+void readEmployees(Employee emp[], int employeeCount);
+void displayEmployees(Employee emp[], int employeeCount );
+Employee findHighestSalaries(Employee emp[], int employeeCount);
+
+int main(){
+    int employeeCount;
+    printf("Enter number of employees: ");
+    scanf("%d",&employeeCount);
+    Employee employee[1000];
+    readEmployees(employee,employeeCount);
+    displayEmployees(employee,employeeCount);
+    Employee highsalary=findHighestSalaries(employee,employeeCount);
+    printf("Employee with highest salary:%s,%f(%s)",highsalary.name,highsalary.salary,highsalary.department);
+return 0;
+}
+void readEmployees(Employee emp[], int employeeCount){
+    for(int i=0;i<employeeCount;i++){
+            printf("Enter id,name,salary,department of employee %d: ",i+1);
+        scanf("%d\t\t%s\t\t%f\t\t%s",&emp[i].id,emp[i].name,&emp[i].salary,emp[i].department);
+    }
+}
+void displayEmployees(Employee emp[],int employeeCount){
+    for(int i=0;i<employeeCount;i++){
+            printf("%d.%d\t%s\t%f\t%s\n",i+1,emp[i].id,emp[i].name,emp[i].salary,emp[i].department);
+    }
+}
+Employee findHighestSalaries(Employee emp[],int employeeCount){
+   Employee highsalary=emp[0];
+    for(int i=0;i<employeeCount;i++){
+        if(emp[i].salary>highsalary.salary){
+            highsalary=emp[i];
+        }
+    }
+    return highsalary;
+}
