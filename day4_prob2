@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <string.h>
+
+struct Employee_t {
+    int id;
+    char name[200];
+    float salary;
+    char department[50];
+};
+
+typedef struct Employee_t Employee;
+
+void readEmployees(Employee emp[], int employeeCount);
+void saveEmployees(Employee emp[], int employeeCount);
+void loadEmployees(Employee emp[], int employeeCount);
+void displayEmployees(Employee emp[], int employeeCount);
+Employee findHighestSalaries(Employee emp[], int employeeCount);
+
+int main() {
+    int employeeCount;
+    printf("Enter number of employees: ");
+    scanf("%d", &employeeCount);
+    
+    Employee employee[1000];
+    
+    readEmployees(employee, employeeCount);
+    saveEmployees(employee, employeeCount);
+    loadEmployees(employee, employeeCount);
+    displayEmployees(employee, employeeCount);
+    
+    Employee highestSalaryEmployee = findHighestSalaries(employee, employeeCount);
+    printf("Employee with highest salary: %s, %f (%s)\n", highestSalaryEmployee.name, highestSalaryEmployee.salary, highestSalaryEmployee.department);
+    
+    return 0;
+}
+
+void readEmployees(Employee emp[], int employeeCount) {
+    for (int i = 0; i < employeeCount; i++) {
+        printf("Enter id, name, salary, department of employee %d: ", i + 1);
+        scanf("%d %s %f %s", &emp[i].id, emp[i].name, &emp[i].salary, emp[i].department);
+    }
+}
+
+void saveEmployees(Employee emp[], int employeeCount) {
+    FILE* file = fopen("employees.txt", "w");
+    if (file == NULL) {
+        printf("Error in creating file.\n");
+        return;
+    }
+    for (int i = 0; i < employeeCount; i++) {
+        fprintf(file, "%d %s %.2f %s\n", emp[i].id, emp[i].name, emp[i].salary, emp[i].department);
+    }
+    fclose(file);
+}
+
+void loadEmployees(Employee emp[], int employeeCount) {
+    FILE* file = fopen("employees.txt", "r");
+    if (file == NULL) {
+        printf("Error in opening file.\n");
+        return;
+    }
+    for (int i = 0; i < employeeCount; i++) {
+        fscanf(file, "%d %s %f %s", &emp[i].id, emp[i].name, &emp[i].salary, emp[i].department);
+    }
+    fclose(file);
+}
+
+void displayEmployees(Employee emp[], int employeeCount) {
+    for (int i = 0; i < employeeCount; i++) {
+        printf("%d. %d\t%s\t%.2f\t%s\n", i + 1, emp[i].id, emp[i].name, emp[i].salary, emp[i].department);
+    }
+}
+
+Employee findHighestSalaries(Employee emp[], int employeeCount) {
+    Employee highsalary = emp[0];
+    for (int i = 1; i < employeeCount; i++) {
+        if (emp[i].salary > highsalary.salary) {
+            highsalary = emp[i];
+        }
+    }
+    return highsalary;
+}
