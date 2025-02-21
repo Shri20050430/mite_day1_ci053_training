@@ -1,0 +1,110 @@
+/*Hospital Patient Management System`  
+`Scenario:`  
+A `hospital` maintains patient records using a `doubly linked list`. The system should:  
+- Add `new patients`  
+- Allow `forward and backward navigation`  
+- Remove `discharged patients`  
+
+`Operations Example:`  
+```
+New Patient Admitted: John (ID 201)  
+New Patient Admitted: Mary (ID 202)  
+New Patient Admitted: David (ID 203)  
+
+Discharging: Mary  
+Remaining Patients: John ↔ David  
+```*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Patient {
+    int id;
+    char name[50];
+    struct Patient* prev;
+    struct Patient* next;
+} Patient;
+
+Patient* create_patient(int id, const char* name) {
+    Patient* new_patient = (Patient*)malloc(sizeof(Patient));
+    new_patient->id = id;
+    strcpy(new_patient->name, name);
+    new_patient->prev = NULL;
+    new_patient->next = NULL;
+    return new_patient;
+}
+
+void add_patient(Patient** head, int id, const char* name) {
+    Patient* new_patient = create_patient(id, name);
+    if (*head == NULL) {
+        *head = new_patient;
+    } else {
+        Patient* temp = *head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = new_patient;
+        new_patient->prev = temp;
+    }
+    printf("New Patient Admitted: %s (ID %d)\n", name, id);
+}
+
+void remove_patient(Patient** head, int id) {
+    if (*head == NULL) {
+        return;
+    }
+
+    Patient* temp = *head;
+    while (temp != NULL && temp->id != id) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Patient with ID %d not found\n", id);
+        return;
+    }
+
+    if (temp->prev != NULL) {
+        temp->prev->next = temp->next;
+    } else {
+        *head = temp->next;
+    }
+
+    if (temp->next != NULL) {
+        temp->next->prev = temp->prev;
+    }
+
+    printf("Discharging: %s\n", temp->name);
+    free(temp);
+}
+
+void display_patients(Patient* head) {
+    Patient* temp = head;
+    if (temp == NULL) {
+        printf("No patients in the hospital\n");
+        return;
+    }
+
+    printf("Remaining Patients:");
+    while (temp != NULL) {
+        printf("%s (ID %d)", temp->name, temp->id);
+        if (temp->next != NULL) {
+            printf(" ↔ ");
+        }
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    Patient* head = NULL;
+
+    add_patient(&head, 201, "John");
+    add_patient(&head, 202, "Mary");
+    add_patient(&head, 203, "David");
+
+    remove_patient(&head, 202);
+    display_patients(head);
+
+    return 0;
+}
