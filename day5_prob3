@@ -1,0 +1,89 @@
+#include <stdio.h>
+#define Queue_size 1000
+typedef float T;
+
+typedef struct {
+    T elements[Queue_size];
+    int _size;
+    int _front;
+    int _back;
+} Queue;
+
+void QueueInit(Queue* stk);
+void QueuePush(Queue* stk, T element);
+int QueueEmpty(Queue* stk);
+T QueueFront(Queue* stk);
+T QueueBack(Queue* stk);
+void QueuePop(Queue* stk);
+
+int main() {
+    float salaries[] = {50000, 40000, 48000, 23000, 2000};
+    Queue stk;
+    QueueInit(&stk);
+    
+    for (int i = 0; i < 5; i++) {
+        QueuePush(&stk, salaries[i]);
+    }
+    
+    printf("Salaries from Queue:\n");
+    while (!QueueEmpty(&stk)) { 
+        float sal = QueueFront(&stk);  
+        printf("%.2f\n", sal);  
+        QueuePop(&stk);
+    }
+    
+    return 0;
+}
+
+void QueueInit(Queue* stk) {
+    stk->_size = 0;
+    stk->_front = -1;
+    stk->_back = -1;
+}
+
+void QueuePush(Queue* stk, T element) {
+    if (stk->_size >= Queue_size) {
+        printf("Queue overflow. Cannot add more elements.\n");
+        return;
+    }
+    stk->_back++;
+    stk->elements[stk->_back] = element;
+    stk->_size++;
+    if (stk->_front == -1) {
+        stk->_front = 0;
+    }
+}
+
+int QueueEmpty(Queue* stk) {
+    return (stk->_size == 0);  
+}
+
+T QueueFront(Queue* stk) {
+    if (QueueEmpty(stk)) {
+        printf("Queue is empty. Cannot access front element.\n");
+        return -1;  
+    }
+    return stk->elements[stk->_front]; 
+}
+
+T QueueBack(Queue* stk) {
+    if (QueueEmpty(stk)) {
+        printf("Queue is empty. Cannot access back element.\n");
+        return -1; 
+    }
+    return stk->elements[stk->_back];
+}
+
+void QueuePop(Queue* stk) {
+    if (QueueEmpty(stk)) {
+        printf("Queue is empty. Cannot pop element.\n");
+        return;
+    }
+    if (stk->_front == stk->_back) {
+        stk->_front = -1;
+        stk->_back = -1;
+    } else {
+        stk->_front++;
+    }
+    stk->_size--;  // Decrement size
+}
