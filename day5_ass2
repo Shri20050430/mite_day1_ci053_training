@@ -1,0 +1,133 @@
+/*Railway Ticket Reservation System`  
+`Scenario:`  
+A `railway booking system` maintains a `queue of passengers` for reservations. The system should:  
+- Add `new reservations`  
+- Process bookings `in order`  
+- Display `waiting list if full`  
+
+`Operations Example:`  
+```
+Booking Confirmed: Passenger 1 (Alice)  
+Booking Confirmed: Passenger 2 (Bob)  
+Waiting List: Passenger 3 (Charlie)  */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_RESERVATIONS 2 // Maximum number of reservations allowed
+
+typedef struct {
+    int passenger_id;
+    char passenger_name[50];
+} Passenger;
+
+typedef struct {
+    Passenger reservations[MAX_RESERVATIONS];
+    Passenger waiting_list[MAX_RESERVATIONS];
+    int front_reservations;
+    int rear_reservations;
+    int front_waiting;
+    int rear_waiting;
+} RailwayBookingSystem;
+
+void initialize_system(RailwayBookingSystem* system) {
+    system->front_reservations = -1;
+    system->rear_reservations = -1;
+    system->front_waiting = -1;
+    system->rear_waiting = -1;
+}
+
+int is_reservations_full(RailwayBookingSystem* system) {
+    return system->rear_reservations == MAX_RESERVATIONS - 1;
+}
+
+int is_waiting_list_full(RailwayBookingSystem* system) {
+    return system->rear_waiting == MAX_RESERVATIONS - 1;
+}
+
+int is_reservations_empty(RailwayBookingSystem* system) {
+    return system->front_reservations == -1;
+}
+
+int is_waiting_list_empty(RailwayBookingSystem* system) {
+    return system->front_waiting == -1;
+}
+
+void add_reservation(RailwayBookingSystem* system, int passenger_id, const char* passenger_name) {
+    if (is_reservations_full(system)) {
+        if (is_waiting_list_full(system)) {
+            printf("Waiting list is full. Cannot add new reservation.\n");
+            return;
+        }
+        if (is_waiting_list_empty(system)) {
+            system->front_waiting = 0;
+        }
+        system->rear_waiting++;
+        system->waiting_list[system->rear_waiting].passenger_id = passenger_id;
+        strcpy(system->waiting_list[system->rear_waiting].passenger_name, passenger_name);
+        printf("Waiting List: Passenger %d (%s)\n", passenger_id, passenger_name);
+    } else {
+        if (is_reservations_empty(system)) {
+            system->front_reservations = 0;
+        }
+        system->rear_reservations++;
+        system->reservations[system->rear_reservations].passenger_id = passenger_id;
+        strcpy(system->reservations[system->rear_reservations].passenger_name, passenger_name);
+        printf("Booking Confirmed: Passenger %d (%s)\n", passenger_id, passenger_name);
+    }
+}
+
+void process_reservations(RailwayBookingSystem* system) {
+    if (is_reservations_empty(system)) {
+        printf("No reservations to process.\n");
+        return;
+    }
+
+    printf("Processing Reservation: Passenger %d (%s)\n", system->reservations[system->front_reservations].passenger_id, system->reservations[system->front_reservations].passenger_name);
+
+    if (system->front_reservations == system->rear_reservations) {
+        system->front_reservations = system->rear_reservations = -1;
+    } else {
+        system->front_reservations++;
+    }
+
+    if (!is_waiting_list_empty(system)) {
+        if (is_reservations_empty(system)) {
+            system->front_reservations = 0;
+        }
+        system->rear_reservations++;
+        system->reservations[system->rear_reservations] = system->waiting_list[system->front_waiting];
+        printf("Booking Confirmed: Passenger %d (%s)\n", system->waiting_list[system->front_waiting].passenger_id, system->waiting_list[system->front_waiting].passenger_name);
+
+        if (system->front_waiting == system->rear_waiting) {
+            system->front_waiting = system->rear_waiting = -1;
+        } else {
+            system->front_waiting++;
+        }
+    }
+}
+
+void display_waiting_list(RailwayBookingSystem* system) {
+    if (is_waiting_list_empty(system)) {
+        printf("No passengers in the waiting list.\n");
+        return;
+    }
+
+    printf("Waiting List:\n");
+    for (int i = system->front_waiting; i <= system->rear_waiting; i++) {
+        printf("Passenger %d (%s)\n", system->waiting_list[i].passenger_id, system->waiting_list[i].passenger_name);
+    }
+}
+
+int main() {
+    RailwayBookingSystem system;
+    initialize_system(&system);
+
+    add_reservation(&system, 1, "Alice");
+    add_reservation(&system, 2, "Bob");
+    add_reservation(&system, 3, "Charlie");
+
+    process_reservations(&system);
+     display_waiting_list(&system);
+    return 0;
+}
