@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <string.h>
+
+// Define the structure for a movie
+struct Movie {
+    char title[50];
+    float rating;
+};
+
+// Function to sort movies by rating in descending order
+void sortMoviesByRating(struct Movie movies[], int n) {
+    struct Movie temp;
+    for (int i = 0; i < n-1; i++) {
+        for (int j = i+1; j < n; j++) {
+            if (movies[i].rating < movies[j].rating) {
+                temp = movies[i];
+                movies[i] = movies[j];
+                movies[j] = temp;
+            }
+        }
+    }
+}
+
+// Function to search for a movie by name using linear search
+void searchMovieByName(struct Movie movies[], int n, char name[]) {
+    for (int i = 0; i < n; i++) {
+        if (strcmp(movies[i].title, name) == 0) {
+            printf("Found: %s (Rating: %.1f)\n", movies[i].title, movies[i].rating);
+            return;
+        }
+    }
+    printf("Movie '%s' not found.\n", name);
+}
+
+// Function to display the top N movies
+void displayTopMovies(struct Movie movies[], int n, int top_n) {
+    sortMoviesByRating(movies, n);
+    for (int i = 0; i < top_n && i < n; i++) {
+        printf("%d. %s (Rating: %.1f)\n", i+1, movies[i].title, movies[i].rating);
+    }
+}
+
+int main() {
+    struct Movie movies[] = {
+        {"Movie A", 8.5},
+        {"Movie B", 9.2},
+        {"Movie C", 7.8}
+        // Add more movies here if needed
+    };
+    int n = sizeof(movies) / sizeof(movies[0]);
+
+    printf("Movies sorted by rating:\n");
+    displayTopMovies(movies, n, 3);
+
+    char search_title[50] = "Movie A";
+    printf("\nSearch '%s':\n", search_title);
+    searchMovieByName(movies, n, search_title);
+
+    return 0;
+}
